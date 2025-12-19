@@ -1,0 +1,19 @@
+.body {
+  display: flex;
+  height: 100dvh;
+  min-width: 100dvw;
+  justify-content: center;
+  place-items: center;
+}
+
+.picContainer {
+  height: 80dvh;
+  background-color: red;
+  width: 80%;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: yellow;
+}
