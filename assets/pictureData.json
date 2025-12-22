@@ -1,0 +1,27 @@
+{
+  "pictures": [
+    {
+      "path": "./images/waldoMuseum.webp",
+      "characters": {
+        "waldo": {
+          "x": "I SHOULD BE A Percentage of the img 79",
+          "y": "572"
+        }
+      },
+      "dimensions": {
+        "default": {
+          "x": 80,
+          "y": 70,
+          "waldo": {
+            "x": 0.8,
+            "y": 0.5
+          }
+        },
+        "max800": {
+          "x": 80,
+          "y": 70
+        }
+      }
+    }
+  ]
+}
