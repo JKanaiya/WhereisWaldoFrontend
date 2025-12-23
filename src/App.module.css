@@ -11,8 +11,6 @@
 .picContainer {
   min-height: 80dvh;
   max-height: 80dvh;
-  /* max-width: 80dvw; */
-  /* display: flex; */
   overflow: scroll;
   overflow-y: hidden;
   background-image: blue;
@@ -20,16 +18,12 @@
 }
 
 .picContainer img {
-  /* min-height: 800px; */
-  /* max-height: 80dvh; */
   min-width: 1150px;
   max-width: 90dvw;
   min-height: 70dvh;
   white-space: nowrap;
   display: flex;
-  /* min-width: 100%; */
   overflow-x: scroll;
-  /* object-fit: cover; */
 }
 
 .box {
