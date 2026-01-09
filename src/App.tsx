@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import styles from './App.module.css'
 import './styles/reset.css'
 import pictures from '../assets/pictureData.json';
+import ApiCall from './apiCalls.js'
 
 
 function App() {
-
   const [box, setBox] = useState({ active: false, location: { x: 0, y: 0 } });
   const [winState, setWinState] = useState(false)
+  // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
+  // const [picture, setPicture] = useState();
+  const randName = useId();
 
   const toggleBoxActive = (ev: { clientX: number, clientY: number }): void | false => {
     if (!box.active) {
@@ -26,77 +29,51 @@ function App() {
     setBox({ active: true, location: { x: ev.clientX, y: ev.clientY } })
   }
 
-  const makeGuess = (char: string): boolean => {
-    let guess;
-    // TODO: This should be an object with the values calculated in the form {x: bla, y: bla}, basically change this to the diemnsions from the JSON
-
+  const makeGuess = async (char: string) => {
     const imageSizeX = (window.innerWidth - window.innerWidth * 0.2);
     const imageSizeY = (window.innerHeight - window.innerHeight * 0.2);
+
+    console.log(imageSizeY);
+
 
     const guessPercentage = {
       x: (box.location.x - (window.innerWidth - window.innerWidth * 0.8)) / imageSizeX,
       y: (box.location.y - (window.innerHeight - window.innerHeight * 0.8)) / imageSizeY,
     }
 
-    const charExists = pictures.pictures[0].characters.find((c) => c.name == char)
+    switch (true) {
+      case window.innerWidth <= 1800 && window.innerWidth > 1300:
+        localStorage.setItem("dimension", "1800")
+        break;
+      case window.innerWidth < 1300 && window.innerWidth > 840:
+        localStorage.setItem("dimension", "1200")
+        break;
+      case window.innerWidth < 840 && window.innerWidth > 600:
+        localStorage.setItem("dimension", "800")
+        break;
+      case window.innerWidth < 600 && window.innerWidth > 400:
+        localStorage.setItem("dimension", "600")
+        break;
+      case window.innerWidth < 400:
+        localStorage.setItem("dimension", "400")
+        break;
+      default:
+        localStorage.setItem("dimension", "default")
+        break;
+    }
 
-    if (charExists) {
-      switch (char) {
-        case "waldo":
-          guess = pictures.pictures[0].characters[0];
-          break;
-        // other chars here
-        default:
-          guess = pictures.pictures[0].characters[0];
-          break;
-      }
+    if (!localStorage.getItem("initName")) {
+      localStorage.setItem("initName", randName)
+    }
 
-      let guessDim = guess.max1800;
+    const picture = pictures.pictures[0]
 
+    try {
+      const result = await ApiCall.makeGuess({ x: guessPercentage.x, y: guessPercentage.y, name: char, pictureId: picture.id })
 
-      switch (true) {
-        case window.innerWidth <= 1800 && window.innerWidth > 1300:
-          guessDim = guess.max1800;
-          break;
-        case window.innerWidth < 1300 && window.innerWidth > 800:
-          guessDim = guess.max1200;
-          break;
-        case window.innerWidth < 800 && window.innerWidth > 600:
-          guessDim = guess.max800;
-          break;
-        case window.innerWidth < 600 && window.innerWidth > 400:
-          guessDim = guess.max600;
-          break;
-        case window.innerWidth < 400:
-          guessDim = guess.max400;
-          break;
-        default:
-          break;
-      }
-
-      console.log(guessDim);
-
-      console.log(guessPercentage);
-
-
-      if (guessPercentage.x >= (guessDim.x - (guessDim.range ? guessDim.range : 0.03)) && guessPercentage.x <= (guessDim.x + (guessDim.range ? guessDim.range : 0.03))) {
-        console.log("bla");
-
-        if (guessPercentage.y >= (guessDim.y - (guessDim.range ? guessDim.range : 0.07)) && guessPercentage.y <= (guessDim.y + (guessDim.range ? guessDim.range : 0.07))) {
-          console.log("Win")
-          setWinState(true)
-          return true
-        } else {
-          console.log("Loss")
-          setWinState(false)
-          return false
-        }
-      }
-    } else {
-      console.log("Loss")
-      setWinState(false)
-      console.error("invalid char name");
-      return false
+      setWinState(result.data.hit ? true : false)
+    } catch (error) {
+      console.log(error);
     }
 
     return false
