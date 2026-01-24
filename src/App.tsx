@@ -1,16 +1,29 @@
-import { useId, useState } from "react";
+import { useId, useLayoutEffect, useRef, useState } from "react";
 import styles from "./App.module.css";
 import "./styles/reset.css";
 import pictures from "../assets/pictureData.json";
 import ApiCall from "./apiCalls.js";
-import React from "react";
 
-function App(): React.FC {
+function App() {
   const [box, setBox] = useState({ active: false, location: { x: 0, y: 0 } });
   const [winState, setWinState] = useState(false);
   // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
   // const [picture, setPicture] = useState();
   const randName = useId();
+  const client = useRef(null);
+
+  const [clientCoord, setclientCoord] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  useLayoutEffect(() => {
+    setclientCoord({
+      width: client.current.offsetWidth,
+      height: client.current.offsetHeight,
+    });
+  }, []);
+
 
   const toggleBoxActive = (ev: {
     clientX: number;
@@ -41,7 +54,7 @@ function App(): React.FC {
     const imageSizeX = window.innerWidth - window.innerWidth * 0.2;
     const imageSizeY = window.innerHeight - window.innerHeight * 0.2;
 
-    console.log(imageSizeY);
+    console.log(box.location);
 
     const guessPercentage = {
       x:
@@ -51,6 +64,8 @@ function App(): React.FC {
         (box.location.y - (window.innerHeight - window.innerHeight * 0.8)) /
         imageSizeY,
     };
+
+    console.log(guessPercentage);
 
     switch (true) {
       case window.innerWidth <= 1800 && window.innerWidth > 1300:
@@ -96,7 +111,7 @@ function App(): React.FC {
   };
 
   return (
-    <div className={styles.body}>
+    <div className={styles.body} ref={client}>
       <div
         className={styles.box}
         style={{
@@ -130,6 +145,8 @@ function App(): React.FC {
         <img src="../assets/images/waldoMuseum.webp" alt="waldoMuseum" />
       </div>
       <p>{`bla: ${winState}`}</p>
+      <p>{`clientCoord: ${clientCoord.height}`}</p>
+      <p>{`window: ${window.innerWidth}`}</p>
     </div>
   );
 }

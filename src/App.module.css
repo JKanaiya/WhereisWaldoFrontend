@@ -19,6 +19,7 @@
 
 .picContainer img {
   min-width: 1150px;
+  /* min-width: 100%; */
   max-width: 90dvw;
   min-height: 70dvh;
   white-space: nowrap;
