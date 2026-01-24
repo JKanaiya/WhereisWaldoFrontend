@@ -20,6 +20,8 @@
         typescript
       ];
 
+      VITE_BACKEND_URL= "http://localhost:3000/";
+
       shellHook = ''
           exec zsh
         +  '';

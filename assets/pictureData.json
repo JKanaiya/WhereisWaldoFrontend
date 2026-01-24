@@ -4,66 +4,10 @@
       "id": 1,
       "path": "./images/waldoMuseum.webp",
       "characters": [
-        {
-          "name": "waldo",
-          "default": {
-            "x": 0.8,
-            "y": 0.5,
-            "range": 0.03
-          },
-          "max1800": {
-            "x": 0.82,
-            "y": 0.73,
-            "range": 0.05
-          },
-          "max1200": {
-            "x": 0.82,
-            "y": 0.5,
-            "range": 0.04
-          },
-          "max800": {
-            "x": 0.82,
-            "y": 0.5,
-            "range": 0.04
-          },
-          "max600": {
-            "x": 0.8,
-            "y": 0.7,
-            "range": 0.05
-          },
-          "max400": {
-            "x": 0.6,
-            "y": 0.6,
-            "range": 0.1
-          }
-        }
-      ],
-      "dimensions": {
-        "default": {
-          "waldo": {
-            "x": 0.8,
-            "y": 0.5
-          }
-        },
-        "max800": {
-          "waldo": {
-            "x": 0.8,
-            "y": 0.7
-          }
-        },
-        "max600": {
-          "waldo": {
-            "x": 0.8,
-            "y": 0.7
-          }
-        },
-        "max400": {
-          "waldo": {
-            "x": 0.8,
-            "y": 0.7
-          }
-        }
-      }
+        "waldo",
+        "waldoBee",
+        "mayFall"
+      ]
     }
   ]
 }

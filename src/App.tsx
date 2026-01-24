@@ -10,7 +10,7 @@ function App() {
   // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
   // const [picture, setPicture] = useState();
   const randName = useId();
-  const client = useRef(null);
+  const constrict = useRef(null)
 
   const [clientCoord, setclientCoord] = useState({
     width: 0,
@@ -19,8 +19,8 @@ function App() {
 
   useLayoutEffect(() => {
     setclientCoord({
-      width: client.current.offsetWidth,
-      height: client.current.offsetHeight,
+      width: constrict.current.offsetWidth,
+      height: constrict.current.offsetHeight,
     });
   }, []);
 
@@ -111,7 +111,7 @@ function App() {
   };
 
   return (
-    <div className={styles.body} ref={client}>
+    <div className={styles.body} >
       <div
         className={styles.box}
         style={{
@@ -133,22 +133,18 @@ function App() {
           {pictures.pictures[0].characters.map((char) => (
             <option
               value={pictures.pictures[0].characters.indexOf(char)}
-              style={{ backgroundColor: "teal" }}
-              onClick={() => makeGuess(char.name)}
+              style={{ backgroundColor: "teal", padding: "2%", marginBottom: 1, borderRadius: 3 }}
+              onClick={() => makeGuess(char)}
             >
-              {char.name}
+              {char}
             </option>
           ))}
         </div>
       </div>
-      <div id={styles.constrict}>
-        <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1400 ? "center" : "right 25%" }}>
-          {/* <img src="../assets/images/waldoMuseum.webp" alt="waldoMuseum" /> */}
+      <div id={styles.constrict} >
+        <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1200 ? "center" : "right 25%", backgroundAttachment: window.innerWidth >= 1200 ? "local" : "scroll local" }} ref={constrict}>
         </div>
       </div>
-      {/* <p>{`bla: ${winState}`}</p> */}
-      {/* <p>{`clientCoord: ${clientCoord.height}`}</p> */}
-      {/* <p>{`window: ${window.innerWidth}`}</p> */}
     </div>
   );
 }

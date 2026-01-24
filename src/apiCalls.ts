@@ -29,17 +29,17 @@ const ApiCall = (function() {
     });
   };
 
-  const makeGuess = async ({ name, x, y, pictureId }: {
+  const makeGuess = async ({ x, y, name, pictureId }: {
     name: string,
     x: number,
     y: number,
     pictureId: number
   }) => {
-    const dimensions = localStorage.getItem("dimension");
+    const dimension = localStorage.getItem("dimension");
     const initName = localStorage.getItem("initName");
-    return await api.post("post", {
+    return await api.post("guess", {
       name,
-      dimensions,
+      dimension,
       x,
       y,
       pictureId,
