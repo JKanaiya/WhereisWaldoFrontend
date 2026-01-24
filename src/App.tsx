@@ -141,12 +141,14 @@ function App() {
           ))}
         </div>
       </div>
-      <div className={styles.picContainer} onClick={toggleBoxActive}>
-        <img src="../assets/images/waldoMuseum.webp" alt="waldoMuseum" />
+      <div id={styles.constrict}>
+        <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1400 ? "center" : "right 25%" }}>
+          {/* <img src="../assets/images/waldoMuseum.webp" alt="waldoMuseum" /> */}
+        </div>
       </div>
-      <p>{`bla: ${winState}`}</p>
-      <p>{`clientCoord: ${clientCoord.height}`}</p>
-      <p>{`window: ${window.innerWidth}`}</p>
+      {/* <p>{`bla: ${winState}`}</p> */}
+      {/* <p>{`clientCoord: ${clientCoord.height}`}</p> */}
+      {/* <p>{`window: ${window.innerWidth}`}</p> */}
     </div>
   );
 }
