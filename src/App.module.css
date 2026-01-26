@@ -6,6 +6,7 @@
   min-width: 100dvw;
   justify-content: center;
   place-items: center;
+  position: relative;
 }
 
 .picContainer {

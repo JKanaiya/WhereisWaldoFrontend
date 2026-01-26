@@ -1,8 +1,13 @@
-import { useId, useLayoutEffect, useRef, useState } from "react";
+import { useId, useState } from "react";
 import styles from "./App.module.css";
 import "./styles/reset.css";
 import pictures from "../assets/pictureData.json";
 import ApiCall from "./apiCalls.js";
+import DisplayChars from "./charDisplay.js";
+
+// type charBool = [{ char:  boolean }]
+//
+const chars = pictures.pictures[0].characters;
 
 function App() {
   const [box, setBox] = useState({ active: false, location: { x: 0, y: 0 } });
@@ -10,20 +15,8 @@ function App() {
   // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
   // const [picture, setPicture] = useState();
   const randName = useId();
-  const constrict = useRef(null)
 
-  const [clientCoord, setclientCoord] = useState({
-    width: 0,
-    height: 0,
-  });
-
-  useLayoutEffect(() => {
-    setclientCoord({
-      width: constrict.current.offsetWidth,
-      height: constrict.current.offsetHeight,
-    });
-  }, []);
-
+  const [foundChars, setFoundChars] = useState([])
 
   const toggleBoxActive = (ev: {
     clientX: number;
@@ -102,11 +95,15 @@ function App() {
         pictureId: picture.id,
       });
 
-      setWinState(result.data.hit ? true : false);
+      if (result.data.hit) {
+        setFoundChars([...foundChars, char]);
+      } else {
+        setWinState(false)
+      }
+
     } catch (error) {
       console.log(error);
     }
-
     return false;
   };
 
@@ -142,9 +139,13 @@ function App() {
         </div>
       </div>
       <div id={styles.constrict} >
-        <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1200 ? "center" : "right 25%", backgroundAttachment: window.innerWidth >= 1200 ? "local" : "scroll local" }} ref={constrict}>
+        <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1200 ? "center" : "right 25%", backgroundAttachment: window.innerWidth >= 1200 ? "local" : "scroll local" }} >
         </div>
       </div>
+      <DisplayChars
+        characters={pictures.pictures[0].characters}
+        foundChars={foundChars}
+      />
     </div>
   );
 }
