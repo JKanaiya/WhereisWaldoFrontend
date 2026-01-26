@@ -4,19 +4,17 @@ import "./styles/reset.css";
 import pictures from "../assets/pictureData.json";
 import ApiCall from "./apiCalls.js";
 import DisplayChars from "./charDisplay.js";
-
-// type charBool = [{ char:  boolean }]
-//
-const chars = pictures.pictures[0].characters;
+import NavBar from "./navBar.js";
 
 function App() {
   const [box, setBox] = useState({ active: false, location: { x: 0, y: 0 } });
-  const [winState, setWinState] = useState(false);
   // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
   // const [picture, setPicture] = useState();
   const randName = useId();
-
+  const initName = localStorage.getItem('initName');
+  const [userName, setUserName] = useState(initName ? initName : randName)
   const [foundChars, setFoundChars] = useState([])
+  const [blur, setBlur] = useState(false)
 
   const toggleBoxActive = (ev: {
     clientX: number;
@@ -42,6 +40,15 @@ function App() {
 
     setBox({ active: true, location: { x: ev.clientX, y: ev.clientY } });
   };
+
+  const changeName = async (char: string) => {
+    try {
+      ApiCall.editName({ name: char })
+    } catch (err) {
+      //TODO: snacks to alert the user that the name change failed
+      console.log(err);
+    }
+  }
 
   const makeGuess = async (char: string) => {
     const imageSizeX = window.innerWidth - window.innerWidth * 0.2;
@@ -98,7 +105,8 @@ function App() {
       if (result.data.hit) {
         setFoundChars([...foundChars, char]);
       } else {
-        setWinState(false)
+        //TODO: snacks to alert the user that they missed
+        console.log("miss");
       }
 
     } catch (error) {
@@ -109,6 +117,9 @@ function App() {
 
   return (
     <div className={styles.body} >
+      <NavBar
+        changeName={changeName}
+      />
       <div
         className={styles.box}
         style={{

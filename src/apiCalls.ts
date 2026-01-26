@@ -22,7 +22,7 @@ const ApiCall = (function() {
     },
   );
 
-  const editPost = async function({ name }: { name: string }) {
+  const editName = async function({ name }: { name: string }) {
     const initName = localStorage.getItem("initName");
     return await api.patch("name", {
       name, initName
@@ -48,7 +48,7 @@ const ApiCall = (function() {
   };
 
   return {
-    makeGuess, editPost
+    makeGuess, editName
   };
 })();
 
