@@ -1,20 +1,34 @@
-import { useId, useState } from "react";
+import { useState } from "react";
 import styles from "./App.module.css";
 import "./styles/reset.css";
 import pictures from "../assets/pictureData.json";
 import ApiCall from "./apiCalls.js";
 import DisplayChars from "./charDisplay.js";
 import NavBar from "./navBar.js";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import { uniqueNamesGenerator, colors, animals } from 'unique-names-generator';
+import PopUp from "./PopUp.js";
 
 function App() {
   const [box, setBox] = useState({ active: false, location: { x: 0, y: 0 } });
   // TODO: the below would be used in the case that i were to add a picture. It would be used to switch the current picture to the desired one
   // const [picture, setPicture] = useState();
-  const randName = useId();
+  const randName: string = uniqueNamesGenerator({
+    dictionaries: [colors, animals]
+  });
   const initName = localStorage.getItem('initName');
+  const timeTaken = localStorage.getItem('timeTaken');
+  const [playing, setPlaying] = useState(initName && !timeTaken ? true : false)
   const [userName, setUserName] = useState(initName ? initName : randName)
+  const [popUpActive, setPopUpActive] = useState(initName ? false : true)
+  const [popUpMsg, setPopUpMsg] = useState("firstTime")
   const [foundChars, setFoundChars] = useState([])
-  const [blur, setBlur] = useState(false)
+  const [gameState, setGameState] = useState({ complete: false, ttc: "" })
+
+  const togglePopUpActive = () => setPopUpActive(!popUpActive);
+  const togglePlaying = () => { togglePopUpActive(); setPlaying(!playing) };
+
+
 
   const toggleBoxActive = (ev: {
     clientX: number;
@@ -38,15 +52,60 @@ function App() {
       }
     }
 
-    setBox({ active: true, location: { x: ev.clientX, y: ev.clientY } });
+    if (playing) {
+      setBox({ active: true, location: { x: ev.clientX, y: ev.clientY } });
+    }
   };
 
-  const changeName = async (char: string) => {
+  function convertSecondsToMS(totalSeconds: number) {
+    const minutes = Math.floor(totalSeconds / 60);
+
+    const seconds = Math.floor(totalSeconds % 60);
+
+    return { minutes, seconds };
+  }
+
+
+  const successNotify = (message: string) => {
+    toast.success(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  };
+
+  const errorNotify = (message: string) => {
+    toast.error(message, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+  };
+
+  const changeName = async (formData: FormData) => {
     try {
-      ApiCall.editName({ name: char })
+      const uName = formData.get(("userName"));
+      const nameChanged = await ApiCall.editName({ name: uName })
+      console.log(nameChanged);
+      if (nameChanged.data.nameChanged) {
+        setUserName(uName)
+        successNotify("Changed name successfully")
+      }
     } catch (err) {
-      //TODO: snacks to alert the user that the name change failed
       console.log(err);
+      errorNotify("Failed to change name")
     }
   }
 
@@ -104,9 +163,18 @@ function App() {
 
       if (result.data.hit) {
         setFoundChars([...foundChars, char]);
+        successNotify(`You found ${char}!`)
+        if (result.data.gameComplete) {
+          setPlaying(false)
+          setPopUpMsg(`You found them all! Would you like to submit your score with this user name?`)
+          setPopUpActive(true)
+          const hm = convertSecondsToMS(result.data.timeTaken);
+          setGameState({ complete: true, ttc: `${hm.minutes}:${hm.seconds < 10 ? '0' : ''}${hm.seconds} ` })
+          localStorage.setItem("timeTaken", `${hm.minutes}:${hm.seconds < 10 ? '0' : ''}${hm.seconds} `)
+        }
       } else {
         //TODO: snacks to alert the user that they missed
-        console.log("miss");
+        errorNotify(`${char} isnt there... try again`)
       }
 
     } catch (error) {
@@ -149,7 +217,7 @@ function App() {
           ))}
         </div>
       </div>
-      <div id={styles.constrict} >
+      <div id={styles.constrict} style={{ filter: playing ? "none " : "blur(5px)" }}>
         <div className={styles.picContainer} onClick={toggleBoxActive} style={{ backgroundPosition: window.innerWidth >= 1200 ? "center" : "right 25%", backgroundAttachment: window.innerWidth >= 1200 ? "local" : "scroll local" }} >
         </div>
       </div>
@@ -157,6 +225,21 @@ function App() {
         characters={pictures.pictures[0].characters}
         foundChars={foundChars}
       />
+      {popUpActive &&
+        <PopUp
+          popUp={popUpMsg}
+          userName={userName}
+          setPopUpMsg={setPopUpMsg}
+          togglePopUpActive={togglePopUpActive}
+          togglePlaying={togglePlaying}
+        />
+      }
+      <ToastContainer />
+      {gameState.complete || timeTaken &&
+        <span className={styles.time}>
+          {timeTaken}
+        </span>
+      }
     </div>
   );
 }

@@ -11,12 +11,12 @@ const NavBar = ({ changeName }: { changeName: Function }) => {
           WALDO
         </h1>
       </div>
-      <div className={nav.inputBlock} style={{ display: window.innerWidth < 400 ? 'none' : 'flex' }} >
-        <input type='text' className={nav.input} placeholder='Change your name' />
-        <button onClick={changeName} className={nav.button}>
+      <form className={nav.inputBlock} style={{ display: window.innerWidth < 400 ? 'none' : 'flex' }} action={changeName}>
+        <input type='text' className={nav.input} placeholder='Change your name' name="userName" />
+        <button className={nav.button} type="submit">
           Change
         </button>
-      </div>
+      </form>
     </div>
   )
 }

@@ -29,7 +29,9 @@
 .title {
   padding: 1%;
   display: flex;
-  font-size: 3rem;
+  font-size: 4rem;
+  font-family: "Glory", sans-serif;
+  font-weight: 500;
   align-items: center;
 }
 

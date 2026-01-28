@@ -1,0 +1,17 @@
+.popup {
+  position: absolute;
+  min-height: 20%;
+  min-width: 40%;
+  top: 40%;
+  right:auto;
+  background-color: white;
+  display: flex;
+  place-items: center;
+  place-content: center;
+  justify-content: space-around;
+  padding: 2%;
+  flex-direction: column;
+  border-radius: 12px;
+}
+
+
