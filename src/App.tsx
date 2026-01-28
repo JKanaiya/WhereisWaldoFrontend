@@ -22,7 +22,7 @@ function App() {
   const [userName, setUserName] = useState(initName ? initName : randName)
   const [popUpActive, setPopUpActive] = useState(initName ? false : true)
   const [popUpMsg, setPopUpMsg] = useState("firstTime")
-  const [foundChars, setFoundChars] = useState([])
+  const [foundChars, setFoundChars] = useState<string[]>()
   const [gameState, setGameState] = useState({ complete: false, ttc: "" })
 
   const togglePopUpActive = () => setPopUpActive(!popUpActive);
@@ -96,12 +96,14 @@ function App() {
 
   const changeName = async (formData: FormData) => {
     try {
-      const uName = formData.get(("userName"));
-      const nameChanged = await ApiCall.editName({ name: uName })
-      console.log(nameChanged);
-      if (nameChanged.data.nameChanged) {
-        setUserName(uName)
-        successNotify("Changed name successfully")
+      const uName = formData.get(("userName"))?.toString();
+      if (uName) {
+        const nameChanged = await ApiCall.editName({ name: uName })
+        console.log(nameChanged);
+        if (nameChanged.data.nameChanged) {
+          setUserName(uName)
+          successNotify("Changed name successfully")
+        }
       }
     } catch (err) {
       console.log(err);
@@ -162,7 +164,7 @@ function App() {
       });
 
       if (result.data.hit) {
-        setFoundChars([...foundChars, char]);
+        setFoundChars(foundChars ? [...foundChars, char] : [char]);
         successNotify(`You found ${char}!`)
         if (result.data.gameComplete) {
           setPlaying(false)

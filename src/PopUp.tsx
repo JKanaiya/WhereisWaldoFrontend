@@ -1,6 +1,6 @@
 import pop from "./styles/popup.module.css";
 
-const PopUp = ({ popUp, userName, setPopUpMsg, togglePopUpActive, togglePlaying }: { popUp: string, userName: string, togglePlaying: () => void, togglePopUpActive: () => void, setPopUpMsg: (str: string) => void }) => {
+const PopUp = ({ popUp, userName, togglePopUpActive, togglePlaying }: { popUp: string, userName: string, togglePlaying: () => void, togglePopUpActive: () => void, setPopUpMsg: (str: string) => void }) => {
   return (
     <div className={pop.popup}>
       {popUp == "firstTime" ? "Welcome to Find Waldo, the goal is to find the 3 characters at the bottom right of your screen. You will be timed. Enjoy!" : popUp}

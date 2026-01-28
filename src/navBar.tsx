@@ -1,6 +1,6 @@
 import nav from './styles/nav.module.css';
 
-const NavBar = ({ changeName }: { changeName: Function }) => {
+const NavBar = ({ changeName }: { changeName: (name: FormData) => void }) => {
   return (
     <div className={nav.bar} style={{ justifyContent: window.innerWidth <= 800 ? 'space-between' : 'space-around' }}>
       <div className={nav.titleBlock}>
