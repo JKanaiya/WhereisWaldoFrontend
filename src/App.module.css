@@ -12,7 +12,7 @@
 .picContainer {
   height: 100%;
   min-width: 1700px;
-  background-image: url('../assets/images/waldoMuseum.webp');
+  background-image: url('/assets/images/waldoMuseum.webp');
   background-size: auto 100%;
   background-repeat: no-repeat;
 }
