@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./App.module.css";
 import "./styles/reset.css";
-import pictures from "../assets/pictureData.json";
+import pictures from "./pictureData.json";
 import ApiCall from "./apiCalls.js";
 import DisplayChars from "./charDisplay.js";
 import NavBar from "./navBar.js";
